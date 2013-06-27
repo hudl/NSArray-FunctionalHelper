@@ -31,7 +31,7 @@
     return nil;
 }
 
-- (NSArray *)where:(BOOL (^)(id obj))testBlock
+- (instancetype)where:(BOOL (^)(id obj))testBlock
 {
     NSMutableArray *new = [NSMutableArray array];
     
@@ -54,7 +54,7 @@
     }
 }
 
-- (NSArray *)map:(id (^)(id obj))block
+- (instancetype)map:(id (^)(id obj))block
 {
     NSMutableArray *result = [NSMutableArray array];
     for (id next in self)
@@ -64,12 +64,12 @@
     return result;
 }
 
-- (NSArray *)select:(id (^)(id obj))block
+- (instancetype)select:(id (^)(id obj))block
 {
     return [self map:block];
 }
 
-- (NSArray *)selectMany:(NSArray *(^)(id obj))block
+- (instancetype)selectMany:(NSArray *(^)(id obj))block
 {
     NSMutableArray *result = [NSMutableArray array];
     for (id next in self)
@@ -79,7 +79,7 @@
     return result;
 }
 
-- (NSArray *)distinct
+- (instancetype)distinct
 {
     NSMutableSet *set = [NSMutableSet set];
     for (id next in self)
@@ -109,7 +109,7 @@
     return total;
 }
 
-- (NSArray *)skip:(NSUInteger)count
+- (instancetype)skip:(NSUInteger)count
 {
     NSMutableArray *result = [NSMutableArray array];
     for (NSUInteger index = count; index < self.count; index++)
@@ -119,7 +119,7 @@
     return result;
 }
 
-- (NSArray *)take:(NSUInteger)count
+- (instancetype)take:(NSUInteger)count
 {
     if (count > self.count)
     {
@@ -134,7 +134,7 @@
     return result;
 }
 
-- (NSArray *)reverse
+- (instancetype)reverse
 {
     NSMutableArray *array = [NSMutableArray arrayWithCapacity:[self count]];
     NSEnumerator *enumerator = [self reverseObjectEnumerator];
@@ -145,9 +145,105 @@
     return array;
 }
 
-- (NSArray *)without:(id)object
+- (instancetype)without:(id)object
 {
     NSMutableArray *result = [[self mutableCopy] autorelease];
+    [result removeObject:object];
+    return result;
+}
+
+@end
+
+@implementation NSSet (FunctionalHelper)
+
+- (id)find:(BOOL (^)(id obj))testBlock
+{
+    for (id next in self)
+    {
+        if (testBlock(next)) {
+            return next;
+        }
+    }
+    return nil;
+}
+
+- (instancetype)where:(BOOL (^)(id obj))testBlock
+{
+    NSMutableSet *new = [NSMutableSet set];
+    
+    for (id next in self)
+    {
+        if (testBlock(next))
+        {
+            [new addObject:next];
+        }
+    }
+    
+    return new;
+}
+
+- (void)each:(void (^)(id obj))block
+{
+    for (id next in self)
+    {
+        block(next);
+    }
+}
+
+- (instancetype)map:(id (^)(id obj))block
+{
+    NSMutableSet *result = [NSMutableSet set];
+    for (id next in self)
+    {
+        [result addObject:block(next)];
+    }
+    
+    return result;
+}
+
+- (instancetype)select:(id (^)(id obj))block
+{
+    return [self map:block];
+}
+
+- (instancetype)selectMany:(NSArray *(^)(id obj))block
+{
+    NSMutableSet *result = [NSMutableSet set];
+    for (id next in self)
+    {
+        [result addObjectsFromArray:block(next)];
+    }
+    
+    return result;
+}
+
+- (NSDictionary *)toDictionary:(id (^)(id obj))block
+{
+    NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithCapacity:self.count];
+    for (id next in self)
+    {
+        [dict setObject:next forKey:block(next)];
+    }
+    return dict;
+}
+
+- (CGFloat)sum:(CGFloat (^)(id obj))block
+{
+    CGFloat total = 0;
+    for (id next in self)
+    {
+        total += block(next);
+    }
+    return total;
+}
+
+- (instancetype)without:(id)object
+{
+    if (!object) {
+        return self;
+    }
+    
+    NSMutableSet *result = [[self mutableCopy] autorelease];
     [result removeObject:object];
     return result;
 }
