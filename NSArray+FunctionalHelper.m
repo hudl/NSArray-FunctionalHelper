@@ -31,7 +31,7 @@
     return nil;
 }
 
-- (instancetype)where:(BOOL (^)(id obj))testBlock
+- (NSArray *)where:(BOOL (^)(id obj))testBlock
 {
     NSMutableArray *new = [NSMutableArray array];
     
@@ -54,7 +54,7 @@
     }
 }
 
-- (instancetype)map:(id (^)(id obj))block
+- (NSArray *)map:(id (^)(id obj))block
 {
     NSMutableArray *result = [NSMutableArray array];
     for (id next in self)
@@ -64,12 +64,12 @@
     return result;
 }
 
-- (instancetype)select:(id (^)(id obj))block
+- (NSArray *)select:(id (^)(id obj))block
 {
     return [self map:block];
 }
 
-- (instancetype)selectMany:(NSArray *(^)(id obj))block
+- (NSArray *)selectMany:(NSArray *(^)(id obj))block
 {
     NSMutableArray *result = [NSMutableArray array];
     for (id next in self)
@@ -79,7 +79,7 @@
     return result;
 }
 
-- (instancetype)distinct
+- (NSArray *)distinct
 {
     NSMutableSet *set = [NSMutableSet set];
     for (id next in self)
@@ -109,7 +109,7 @@
     return total;
 }
 
-- (instancetype)skip:(NSUInteger)count
+- (NSArray *)skip:(NSUInteger)count
 {
     NSMutableArray *result = [NSMutableArray array];
     for (NSUInteger index = count; index < self.count; index++)
@@ -119,7 +119,7 @@
     return result;
 }
 
-- (instancetype)take:(NSUInteger)count
+- (NSArray *)take:(NSUInteger)count
 {
     if (count > self.count)
     {
@@ -134,7 +134,7 @@
     return result;
 }
 
-- (instancetype)reverse
+- (NSArray *)reverse
 {
     NSMutableArray *array = [NSMutableArray arrayWithCapacity:[self count]];
     NSEnumerator *enumerator = [self reverseObjectEnumerator];
@@ -145,7 +145,7 @@
     return array;
 }
 
-- (instancetype)without:(id)object
+- (NSArray *)without:(id)object
 {
     NSMutableArray *result = [[self mutableCopy] autorelease];
     [result removeObject:object];
@@ -167,7 +167,7 @@
     return nil;
 }
 
-- (instancetype)where:(BOOL (^)(id obj))testBlock
+- (NSSet *)where:(BOOL (^)(id obj))testBlock
 {
     NSMutableSet *new = [NSMutableSet set];
     
@@ -190,7 +190,7 @@
     }
 }
 
-- (instancetype)map:(id (^)(id obj))block
+- (NSSet *)map:(id (^)(id obj))block
 {
     NSMutableSet *result = [NSMutableSet set];
     for (id next in self)
@@ -201,12 +201,12 @@
     return result;
 }
 
-- (instancetype)select:(id (^)(id obj))block
+- (NSSet *)select:(id (^)(id obj))block
 {
     return [self map:block];
 }
 
-- (instancetype)selectMany:(NSArray *(^)(id obj))block
+- (NSSet *)selectMany:(NSArray *(^)(id obj))block
 {
     NSMutableSet *result = [NSMutableSet set];
     for (id next in self)
@@ -237,7 +237,7 @@
     return total;
 }
 
-- (instancetype)without:(id)object
+- (NSSet *)without:(id)object
 {
     if (!object) {
         return self;
