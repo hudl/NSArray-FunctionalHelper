@@ -22,3 +22,15 @@
 - (NSArray *)reverse;
 - (NSArray *)without:(id)object;
 @end
+
+@interface NSSet (FunctionalHelper)
+- (id)find:(BOOL (^)(id obj))testBlock;
+- (NSSet *)where:(BOOL (^)(id obj))textBlock;
+- (void)each:(void (^)(id obj))block;
+- (NSSet *)map:(id (^)(id obj))block;
+- (NSSet *)select:(id (^)(id obj))block;
+- (NSSet *)selectMany:(NSArray *(^)(id obj))block;
+- (NSDictionary *)toDictionary:(id (^)(id obj))block;
+- (CGFloat)sum:(CGFloat (^)(id obj))block;
+- (NSSet *)without:(id)object;
+@end
