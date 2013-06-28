@@ -153,3 +153,99 @@
 }
 
 @end
+
+@implementation NSSet (FunctionalHelper)
+
+- (id)find:(BOOL (^)(id obj))testBlock
+{
+    for (id next in self)
+    {
+        if (testBlock(next)) {
+            return next;
+        }
+    }
+    return nil;
+}
+
+- (NSSet *)where:(BOOL (^)(id obj))testBlock
+{
+    NSMutableSet *new = [NSMutableSet set];
+    
+    for (id next in self)
+    {
+        if (testBlock(next))
+        {
+            [new addObject:next];
+        }
+    }
+    
+    return new;
+}
+
+- (void)each:(void (^)(id obj))block
+{
+    for (id next in self)
+    {
+        block(next);
+    }
+}
+
+- (NSSet *)map:(id (^)(id obj))block
+{
+    NSMutableSet *result = [NSMutableSet set];
+    for (id next in self)
+    {
+        [result addObject:block(next)];
+    }
+    
+    return result;
+}
+
+- (NSSet *)select:(id (^)(id obj))block
+{
+    return [self map:block];
+}
+
+- (NSSet *)selectMany:(NSArray *(^)(id obj))block
+{
+    NSMutableSet *result = [NSMutableSet set];
+    for (id next in self)
+    {
+        [result addObjectsFromArray:block(next)];
+    }
+    
+    return result;
+}
+
+- (NSDictionary *)toDictionary:(id (^)(id obj))block
+{
+    NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithCapacity:self.count];
+    for (id next in self)
+    {
+        [dict setObject:next forKey:block(next)];
+    }
+    return dict;
+}
+
+- (CGFloat)sum:(CGFloat (^)(id obj))block
+{
+    CGFloat total = 0;
+    for (id next in self)
+    {
+        total += block(next);
+    }
+    return total;
+}
+
+- (NSSet *)without:(id)object
+{
+    if (!object) {
+        return self;
+    }
+    
+    NSMutableSet *result = [[self mutableCopy] autorelease];
+    [result removeObject:object];
+    return result;
+}
+
+@end
