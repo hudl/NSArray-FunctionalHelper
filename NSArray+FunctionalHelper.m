@@ -11,6 +11,16 @@
 
 @implementation NSArray (FunctionalHelper)
 
+- (BOOL)all:(BOOL (^)(id obj))testBlock
+{
+    return [[self where:testBlock] count] == [self count];
+}
+
+- (BOOL)any:(BOOL (^)(id obj))testBlock
+{
+    return [self find:testBlock] != nil;
+}
+
 - (id)first
 {
     if ([self count] == 0)
@@ -155,6 +165,16 @@
 @end
 
 @implementation NSSet (FunctionalHelper)
+
+- (BOOL)all:(BOOL (^)(id obj))testBlock
+{
+    return [[self where:testBlock] count] == [self count];
+}
+
+- (BOOL)any:(BOOL (^)(id obj))testBlock
+{
+    return [self find:testBlock] != nil;
+}
 
 - (id)find:(BOOL (^)(id obj))testBlock
 {
