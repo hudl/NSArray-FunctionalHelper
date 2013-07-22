@@ -7,6 +7,8 @@
 //
 
 @interface NSArray (FunctionalHelper)
+- (BOOL)all:(BOOL (^)(id obj))testBlock;
+- (BOOL)any:(BOOL (^)(id obj))testBlock;
 - (id)first;
 - (id)find:(BOOL (^)(id obj))testBlock;
 - (NSArray *)where:(BOOL (^)(id obj))textBlock;
@@ -24,6 +26,8 @@
 @end
 
 @interface NSSet (FunctionalHelper)
+- (BOOL)all:(BOOL (^)(id obj))testBlock;
+- (BOOL)any:(BOOL (^)(id obj))testBlock;
 - (id)find:(BOOL (^)(id obj))testBlock;
 - (NSSet *)where:(BOOL (^)(id obj))textBlock;
 - (void)each:(void (^)(id obj))block;
