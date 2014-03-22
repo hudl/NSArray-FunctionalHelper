@@ -8,6 +8,45 @@
 
 #import "NSArray+FunctionalHelper.h"
 
+@interface NSObject (Shared)
+- (id)sharedMinimum:(id (^)(id obj))block;
+- (id)sharedMaximum:(id (^)(id obj))block;
+
+@end
+
+@implementation NSObject (Shared)
+
+- (id)sharedMinimum:(id (^)(id obj))block
+{
+    id minObj = nil;
+    id minRes = nil;
+    for (id element in (id<NSFastEnumeration>)self) {
+        id blockRes = block(element);
+        if (!minRes || [minRes compare:blockRes] == NSOrderedDescending) {
+            minRes = blockRes;
+            minObj = element;
+        }
+    }
+    
+    return minObj;
+}
+
+- (id)sharedMaximum:(id (^)(id obj))block
+{
+    id maxObj = nil;
+    id maxRes = nil;
+    for (id element in (id<NSFastEnumeration>)self) {
+        id blockRes = block(element);
+        if (!maxRes || [maxRes compare:blockRes] == NSOrderedAscending) {
+            maxRes = blockRes;
+            maxObj = element;
+        }
+    }
+    
+    return maxObj;
+}
+
+@end
 
 @implementation NSArray (FunctionalHelper)
 
@@ -164,32 +203,12 @@
 
 - (id)minimum:(id (^)(id obj))block
 {
-    id minObj = nil;
-    id minRes = nil;
-    for (id element in self) {
-        id blockRes = block(element);
-        if (!minRes || [minRes compare:blockRes] == NSOrderedDescending) {
-            minRes = blockRes;
-            minObj = element;
-        }
-    }
-    
-    return minObj;
+    return [self sharedMinimum:block];
 }
 
 - (id)maximum:(id (^)(id obj))block
 {
-    id maxObj = nil;
-    id maxRes = nil;
-    for (id element in self) {
-        id blockRes = block(element);
-        if (!maxRes || [maxRes compare:blockRes] == NSOrderedAscending) {
-            maxRes = blockRes;
-            maxObj = element;
-        }
-    }
-    
-    return maxObj;
+    return [self sharedMaximum:block];
 }
 
 @end
@@ -300,32 +319,12 @@
 
 - (id)minimum:(id (^)(id obj))block
 {
-    id minObj = nil;
-    id minRes = nil;
-    for (id element in self) {
-        id blockRes = block(element);
-        if (!minRes || [minRes compare:blockRes] == NSOrderedDescending) {
-            minRes = blockRes;
-            minObj = element;
-        }
-    }
-    
-    return minObj;
+    return [self sharedMinimum:block];
 }
 
 - (id)maximum:(id (^)(id obj))block
 {
-    id maxObj = nil;
-    id maxRes = nil;
-    for (id element in self) {
-        id blockRes = block(element);
-        if (!maxRes || [maxRes compare:blockRes] == NSOrderedAscending) {
-            maxRes = blockRes;
-            maxObj = element;
-        }
-    }
-    
-    return maxObj;
+    return [self sharedMaximum:block];
 }
 
 @end
