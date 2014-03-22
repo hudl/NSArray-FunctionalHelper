@@ -162,6 +162,36 @@
     return result;
 }
 
+- (id)minimum:(id (^)(id obj))block
+{
+    id minObj = nil;
+    id minRes = nil;
+    for (id element in self) {
+        id blockRes = block(element);
+        if (!minRes || [minRes compare:blockRes] == NSOrderedDescending) {
+            minRes = blockRes;
+            minObj = element;
+        }
+    }
+    
+    return minObj;
+}
+
+- (id)maximum:(id (^)(id obj))block
+{
+    id maxObj = nil;
+    id maxRes = nil;
+    for (id element in self) {
+        id blockRes = block(element);
+        if (!maxRes || [maxRes compare:blockRes] == NSOrderedAscending) {
+            maxRes = blockRes;
+            maxObj = element;
+        }
+    }
+    
+    return maxObj;
+}
+
 @end
 
 @implementation NSSet (FunctionalHelper)
@@ -266,6 +296,36 @@
     NSMutableSet *result = [[self mutableCopy] autorelease];
     [result removeObject:object];
     return result;
+}
+
+- (id)minimum:(id (^)(id obj))block
+{
+    id minObj = nil;
+    id minRes = nil;
+    for (id element in self) {
+        id blockRes = block(element);
+        if (!minRes || [minRes compare:blockRes] == NSOrderedDescending) {
+            minRes = blockRes;
+            minObj = element;
+        }
+    }
+    
+    return minObj;
+}
+
+- (id)maximum:(id (^)(id obj))block
+{
+    id maxObj = nil;
+    id maxRes = nil;
+    for (id element in self) {
+        id blockRes = block(element);
+        if (!maxRes || [maxRes compare:blockRes] == NSOrderedAscending) {
+            maxRes = blockRes;
+            maxObj = element;
+        }
+    }
+    
+    return maxObj;
 }
 
 @end
