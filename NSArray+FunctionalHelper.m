@@ -162,6 +162,36 @@
     return result;
 }
 
+- (NSArray *)flatten
+{
+    NSMutableArray *result = [NSMutableArray array];
+    for (id next in self)
+    {
+        if ([next isKindOfClass:[NSArray class]])
+        {
+            for (id object in next)
+            {
+                if ([object isKindOfClass:[NSArray class]])
+                {
+                    for (id rabbitHole in [object flatten])
+                    {
+                        [result addObject:rabbitHole];
+                    }
+                }
+                else
+                {
+                    [result addObject:object];
+                }
+            }
+        }
+        else
+        {
+            [result addObject:next];
+        }
+    }
+    return result;
+}
+
 @end
 
 @implementation NSSet (FunctionalHelper)

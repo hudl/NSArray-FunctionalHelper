@@ -23,6 +23,7 @@
 - (NSArray *)take:(NSUInteger)count;
 - (NSArray *)reverse;
 - (NSArray *)without:(id)object;
+- (NSArray *)flatten;
 @end
 
 @interface NSSet (FunctionalHelper)
