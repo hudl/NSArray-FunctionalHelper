@@ -23,6 +23,8 @@
 - (NSArray *)take:(NSUInteger)count;
 - (NSArray *)reverse;
 - (NSArray *)without:(id)object;
+- (id)minimum:(id (^)(id obj))block;
+- (id)maximum:(id (^)(id obj))block;
 @end
 
 @interface NSSet (FunctionalHelper)
@@ -37,4 +39,6 @@
 - (NSDictionary *)toDictionary:(id (^)(id obj))block;
 - (CGFloat)sum:(CGFloat (^)(id obj))block;
 - (NSSet *)without:(id)object;
+- (id)minimum:(id (^)(id obj))block;
+- (id)maximum:(id (^)(id obj))block;
 @end
